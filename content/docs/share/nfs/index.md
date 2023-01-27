@@ -212,7 +212,7 @@ chmod -R 777  /mnt/shared
 
 ## 客户端访问授权
 
-可以直接通过命令行修改 `/etc/exports` 文件：
+可以直接通过命令行修改  `/etc/config/nfs` 文件(  特别注意不是 linux 下常见的 `/etc/exports` 文件)：
 
 ```bash
 /mnt/download   192.168.0.0/16(rw,sync,root_squash,all_squash,insecure,no_subtree_check)
