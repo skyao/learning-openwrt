@@ -231,6 +231,10 @@ sudo exportfs -a
 
 这个操作也可以通过 openwrt 的界面来完成，打开 网络存储 -》nfs管理页面（ http://192.168.0.1/cgi-bin/luci/admin/nas/nfs）操作即可。
 
+备注：新版本的  `/etc/config/nfs` 文件格式有发生变化，建议还是用管理页面操作。
+
+
+
 ## 参考资料
 
 - [OpenWRT配置NTFS硬盘自动挂载](https://zhuanlan.zhihu.com/p/554873559)

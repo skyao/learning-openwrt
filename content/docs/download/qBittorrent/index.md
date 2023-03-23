@@ -33,3 +33,12 @@ Bittorent 设置：
 通过页面进行下载设置：
 
 http://192.168.0.1:8080/
+
+## 远程访问
+
+可以打开web ui的远程访问功能，通过 ddns 和端口映射就可以远程控制 qBittorrent 。
+
+特别注意：如果遇到报错 Unauthorized ，则需要在 qBittorrent 配置中的 web ui 选项中，取消以下的勾选：
+
+- 启用跨站请求伪造 (CSRF) 保护
+- 启用 Host header 属性验证
