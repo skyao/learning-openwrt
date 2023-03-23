@@ -20,6 +20,9 @@ smbpasswd -a root
 增加一个新的 linux 用户并设置 home 目录：
 
 ```bash
+opkg update
+opkg install shadow-useradd
+
 useradd sky -g root
 passwd sky
 mkdir /home/sky
