@@ -4,7 +4,7 @@ linkTitle: "AQC108网卡"
 weight: 600
 date: 2021-08-26
 description: >
-  在 openERT 下使用 AQC108 网卡的问题
+  在 openWRT 下使用 AQC108 网卡的问题
 ---
 
 ## 总结

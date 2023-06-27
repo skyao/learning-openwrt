@@ -53,6 +53,10 @@ Token	:3de14556b8a8bXXXXXXXXXXXXXX
 
 https://openapp.qq.com/docs/OpenWRT/ddns.html
 
+> 更新：这个网址现在（2023年6月）已经打不开了。但好在下载地址还可以使用：
+>
+> http://openwrt-tencentddns-1301800460.cos.ap-guangzhou.myqcloud.com/luci-app-tencentddns_0.1.0-1_all.ipk
+
 这个插件很久没有更新了，不过目前还可以用。
 
 安装方式参考上面文档的说明，在 openwrt 的 系统 -》软件包 页面进行网络安装：
