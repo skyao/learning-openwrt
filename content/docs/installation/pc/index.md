@@ -1,10 +1,10 @@
 ---
-title: "在物理机上安装OpenWRT"
+title: "在物理机上安装 OpenWRT"
 linkTitle: "物理机"
-weight: 20
+weight: 40
 date: 2021-08-26
 description: >
-  介绍 OpenWRT 在PC物理机上的安装
+  介绍 OpenWRT 在物理机上的安装
 ---
 
 ## 安装
