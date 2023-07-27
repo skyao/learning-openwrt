@@ -113,6 +113,13 @@ Successfully imported disk as 'unused0:local:108/vm-108-disk-0.raw'
 
 编辑这个磁盘，不用改动，点添加即可。然后用菜单中的 resize 功能调整磁盘的大小，修改为 8 G。
 
+备注：这个 resize 操作还必须进行，如果直接启动，会报错如下：
+
+```bash
+kvm: -device scsi-hd,bus=scsihw0.0,channel=0,scsi-id=0,lun=0,drive=drive-scsi0,id=scsi0,bootindex=100: Cannot get 'write' permission without 'resize': Image size is not a multiple of request alignment
+TASK ERROR: start failed: QEMU exited with code 1
+```
+
 ### 修改引导顺序
 
 修改 openwrt 虚拟机的引导顺序，在虚拟机的选项（options） -》引导顺序（boot order）中，勾选刚才的磁盘，取消网络启动。
