@@ -1,11 +1,13 @@
 ---
-title: "设置OpenWRT的smartdns"
-linkTitle: "smartdns"
-weight: 20
+title: "[归档]设置OpenWRT的smartdns"
+linkTitle: "[归档]smartdns"
+weight: 200
 date: 2021-08-26
 description: >
   通过 smartdns 进行 dns 解析加速
 ---
+
+> 开启 smartdns 之后发现偶尔会遇到莫名其妙的问题，暂时先不用。
 
 ## 背景
 

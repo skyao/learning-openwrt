@@ -1,13 +1,17 @@
 ---
-title: "OpenConnect VPN"
-linkTitle: "OpenConnect VPN"
-weight: 10
+title: "[归档]OpenConnect VPN"
+linkTitle: "[归档]OpenConnect VPN"
+weight: 100
 date: 2021-08-26
 description: >
   使用 OpenConnect VPN
 ---
 
 
+
+> 备注： zerotier 非常好用，就没有继续使用 OpenConnect VPN 了。
+> 
+> 归档
 
 
 
