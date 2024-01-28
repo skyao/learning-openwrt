@@ -27,6 +27,38 @@ http://192.168.0.1/cgi-bin/luci/admin/services/openclash
 如果启动时卡住，尤其是下载失败，请注意很可能是 dns 污染造成下载失败。
 {{% /alert %}}
 
+## 常见故障
+
+### 启动失败
+
+openclass 启动失败，运行日志显示：
+
+```bash
+错误: 无法获取General部分的转发端口设置, OpenClash 使用原始配置文件启动失败
+错误: 无法获取DNS部分的运行模式设置, OpenClash 使用原始配置文件启动失败
+错误: 无法获取DNS部分的监听端口设置, OpenClash 使用原始配置文件启动失败
+错误: OpenClash 启动失败，尝试使用原始配置文件启动...
+第六步: 等待主程序下载外部文件...
+```
+
+解决方案是打开 "插件设置"  -> "版本更新"，点击 "检查并更新" 来更新各个内核版本：
+
+- [Dev] 当前内核版本
+- [TUN] 当前内核版本
+- [Meta] 当前内核版本
+
+注意要关闭lan口的IPV6分配和IPV6 DHCP，否则会有如下提示：
+
+```bash
+2024-01-28 15:14:02 警告：OpenClash 启动成功，检测到您启用了IPv6的DHCP服务，可能会造成连接异常！
+```
+
+参考：
+
+- https://github.com/vernesong/OpenClash/issues/1758
+- https://github.com/vernesong/OpenClash/issues/913
+
+
 ## 避免bt流量走代理
 
 由于同时开启了 openclash 做代理，因此会遇到一个问题：有些 bt 的流量会被 openclash 代理，从而无端的耗费了宝贵的代理流量。
