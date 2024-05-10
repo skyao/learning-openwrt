@@ -49,6 +49,18 @@ openwrt 默认安装了以下 samba 的包：
 
 > 注意: 这里用的是 samba 4 版本。
 
+### 准备共享目录
+
+为 openwrt 虚拟机增加一个硬盘，大小暂时设置为 256g，用来作为一个共享目录，存放一些临时性的东西，方便日常跨机器共享文件。
+
+在 openwrt 中挂载这个硬盘，分区，格式化为 ext4 格式，挂载目录为 `/mnt/sda1`。
+
+将整个分区都设置为 777，方便后续读写文件。
+
+```bash
+chmod -R 777 /mnt/sda1/
+```
+
 ## 设置
 
 ### 页面设置
@@ -61,13 +73,9 @@ http://192.168.0.1/cgi-bin/luci/admin/nas/samba4
 
 | name     | 目录          | 容许用户 |
 | -------- | ------------- | -------- |
-| download | /mnt/download | root,sky |
-| shared   | /mnt/shared   | root,sky |
-| movie    | /mnt/movie    | root,sky |
-| movie2   | /mnt/movie2   | root,sky |
-| movie3   | /mnt/movie3   | root,sky |
+| share   | /mnt/sda1   | root,sky |
 
-开始容许匿名用户，**创建权限掩码** 默认为 0666，**目录权限掩码** 默认为 0777
+不容许匿名用户，**创建权限掩码** 默认为 0666，**目录权限掩码** 默认为 0777
 
 ### 修改配置文件
 
