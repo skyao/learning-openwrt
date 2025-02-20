@@ -7,19 +7,19 @@ description: >
   通过 openclash 进行网络代理
 ---
 
-## 安装
+## 安装 openclash
 
 我使用的 openwrt 固件默认安装了 openclash：
 
 http://192.168.0.1/cgi-bin/luci/admin/services/openclash
 
-## 配置
+## 配置 openclash
 
 在配置文件订阅中，添加订阅地址，然后保存，再更新配置。
 
 也可以启用自动更新，比如每周一更新一次。
 
-## 启用
+## 开启 openclash
 
 启动后可以通过 openclash 菜单中的 "运行日志" 来查看启动过程，尤其是启动失败的原因。
 
@@ -149,3 +149,41 @@ envoy-1.23.3-linux-x86_64     100%[=============================================
 这样就可以指定访问 `v4.plex.tv` 这个域名时不使用代理而是直连。
 
 注意：此时代理模式必须是 Rule，而不能是 Globle 或者 Direct。可以在菜单项 "插件设置" -> "模式设置" 中选择 "代理模式" 为 "Rule[策略代理]"。
+
+## 开启全局代理
+
+某些情况下，需要在 openwrt 上开启全局代理，以便让部分不方便设置代理的场合也可以使用到 openwrt 和 openclash 插件提供的代理。
+
+> 注意：操作时需要注意，稍有不慎就会无法生效。
+
+openclash 开启全局代理的步骤：
+
+1. 修改代理模式为全局（global）
+
+   打开 "openclash" -> "运行状态"，修改代理模式为全局：
+
+  ![](images/enable-global-proxy-01.png)
+
+  默认为规则（rule），修改之后，注意检查其他几个位置是否已经修改为全局。
+
+  打开 "openclash" -> "插件设置" -> "模式设置" -> "代理模式"，设置为 "Global[全局代理（需前往控制面板手工指定节点]"：
+
+  ![](images/enable-global-proxy-02.png)
+
+  这里已经在提醒我们一个非常重要的事项：全局模式必须在控制面版手工指定节点。这里说的控制面板是 "openclash" -> "运行状态" 下的这个 "Dashboard 控制面板"：
+
+  ![](images/enable-global-proxy-03.png)
+
+2. 手工指定节点
+
+  点上面的 "Dashboard 控制面板" 进入控制面板，然后指定 global 模式下要使用的节点，如图所示：
+
+  ![](images/enable-global-proxy-04.png)
+
+3. （补充）DNS 设置
+
+  上面的设置正常已经可以开启全局代理了，但有时依然会出现无法访问的问题，大多数是因为 dns 解析出现问题。
+
+  打开 "openclash" -> "插件设置" -> "DNS设置" -> "本地 DNS 劫持"，选择推荐的 "使用 Dnsmasq 转发"
+
+  ![](images/enable-global-proxy-05.png)
