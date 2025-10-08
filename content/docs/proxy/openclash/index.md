@@ -7,6 +7,10 @@ description: >
   通过 openclash 进行网络代理
 ---
 
+TODO：准备参考下面视频的做法，实现 openclash 的最佳配置
+
+https://www.youtube.com/watch?v=S2l_0g4EOHk
+
 ## 安装 openclash
 
 我使用的 openwrt 固件默认安装了 openclash：
