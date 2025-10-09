@@ -41,7 +41,7 @@ http://192.168.0.1/cgi-bin/luci/admin/network/firewall/forwards
 由于公网ip是每次拨号都不一样的，因此需要配置 ddns 一起使用，如：
 
 ```bash
-ssh root@dev.skyao.io -p 18822
+ssh root@dev.skyao.net -p 18822
 ```
 
 

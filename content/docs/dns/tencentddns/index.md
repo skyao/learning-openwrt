@@ -38,7 +38,7 @@ https://console.dnspod.cn/account/token/token
 创建密钥，设置为:
 
 ```
-dev.skyao.io
+dev.skyao.net
 ID	:383XXX
 Token	:3de14556b8a8bXXXXXXXXXXXXXX
 ```
@@ -102,17 +102,17 @@ Collected errors:
 
 此时去腾讯云的页面，可以看到dev这个a记录的值已经被修改为正确的ip地址：
 
-https://console.dnspod.cn/dns/skyao.io/record
+https://console.dnspod.cn/dns/skyao.net/record
 
 用 nslookup 命令检查：
 
 ```bash
-nslookup dev.skyao.io
+nslookup dev.skyao.net
 Server:		127.0.0.53
 Address:	127.0.0.53#53
 
 Non-authoritative answer:
-Name:	dev.skyao.io
+Name:	dev.skyao.net
 Address: 116.21.255.9
 ```
 
