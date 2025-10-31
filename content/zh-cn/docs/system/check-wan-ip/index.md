@@ -18,7 +18,7 @@ description: >
 ssh 登录 openwrt 路由器，添加以下脚本：
 
 ```bash
-/usr/bin/check_wan_ip.sh
+vi /usr/bin/check_wan_ip.sh
 ```
 
 内容为：
@@ -122,10 +122,25 @@ crontab -e
 tail -f /var/log/check_wan_ip.log
 ```
 
-正常会看到类似如下的内容：
+如果获取到的是公网ip，会看到类似如下的内容：
 
 ```properties
 2025-10-31 21:12:00 Got public IP (116.21.255.172) on wan, OK.
 2025-10-31 21:13:00 Got public IP (116.21.255.172) on wan, OK.
 2025-10-31 21:14:00 Got public IP (116.21.255.172) on wan, OK.
+```
+
+如果获取到的是私网ip，则会多次尝试拨号，直到获取到公网ip：
+
+```bash
+2025-10-31 21:27:00 Got private/CGNAT IP (100.95.147.166) on wan
+2025-10-31 21:27:00 Redialing wan...
+2025-10-31 21:28:00 Got private/CGNAT IP (100.95.155.241) on wan
+2025-10-31 21:28:00 Redialing wan...
+2025-10-31 21:29:00 Got private/CGNAT IP (100.95.143.37) on wan
+2025-10-31 21:29:00 Redialing wan...
+2025-10-31 21:30:00 Got private/CGNAT IP (100.95.143.37) on wan
+2025-10-31 21:30:00 Redialing wan...
+2025-10-31 21:31:00 Got public IP (49.84.144.173) on wan, OK.
+2025-10-31 21:32:00 Got public IP (49.84.144.173) on wan, OK.
 ```
