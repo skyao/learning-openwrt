@@ -1,5 +1,5 @@
 ---
-title: "设置OpenWRT的VPN"
+title: "VPN网络"
 linkTitle: "VPN"
 weight: 5000
 date: 2021-08-26

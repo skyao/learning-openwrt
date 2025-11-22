@@ -148,6 +148,7 @@ envoy-1.23.3-linux-x86_64     100%[=============================================
 
 ```bash
 - DOMAIN,v4.plex.tv,DIRECT
+- DOMAIN-SUFFIX,copilot.microsoft.com,节点选择
 ```
 
 这样就可以指定访问 `v4.plex.tv` 这个域名时不使用代理而是直连。

@@ -1,5 +1,5 @@
 ---
-title: "设置OpenWRT的网络代理"
+title: "网络代理"
 linkTitle: "代理"
 weight: 2000
 date: 2021-08-26
