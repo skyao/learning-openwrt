@@ -19,7 +19,7 @@ http://192.168.0.1/cgi-bin/luci/admin/services/openclash
 
 ## 配置 openclash
 
-在配置文件订阅中，添加订阅地址，然后保存，再更新配置。
+在"配置订阅"中，添加订阅地址，然后保存，再更新配置。
 
 也可以启用自动更新，比如每周一更新一次。
 
@@ -38,17 +38,15 @@ http://192.168.0.1/cgi-bin/luci/admin/services/openclash
 openclass 启动失败，运行日志显示：
 
 ```bash
-错误: 无法获取General部分的转发端口设置, OpenClash 使用原始配置文件启动失败
-错误: 无法获取DNS部分的运行模式设置, OpenClash 使用原始配置文件启动失败
-错误: 无法获取DNS部分的监听端口设置, OpenClash 使用原始配置文件启动失败
-错误: OpenClash 启动失败，尝试使用原始配置文件启动...
-第六步: 等待主程序下载外部文件...
+2025-10-26 10:45:26 错误：【1/3】【Meta】版本内核下载失败...
+2025-10-26 10:45:26 【/tmp/clash_meta.tar.gz】下载失败：【curl: (28) Connection timed out after 10001 milliseconds】
+2025-10-26 10:45:09 下载进度：【clash_meta.tar.gz - 0%】
+2025-10-26 10:45:09 提示：【Meta】版本内核正在下载，如下载失败请尝试手动下载并上传...
+2025-10-26 10:44:54 提示：检测到内核文件不存在，准备开始下载...
 ```
 
-解决方案是打开 "插件设置"  -> "版本更新"，点击 "检查并更新" 来更新各个内核版本：
+解决方案是打开 "插件设置"  -> "版本更新"，点击 "检查并更新" 来更新内核版本：
 
-- [Dev] 当前内核版本
-- [TUN] 当前内核版本
 - [Meta] 当前内核版本
 
 注意要关闭lan口的IPV6分配和IPV6 DHCP，否则会有如下提示：
@@ -62,6 +60,23 @@ openclass 启动失败，运行日志显示：
 - https://github.com/vernesong/OpenClash/issues/1758
 - https://github.com/vernesong/OpenClash/issues/913
 
+这个文件有时半天都下载不下来，所有最好的办法是提前准备好这个文件，然后上传到 openwrt 的 `/etc/openclash/core/` 目录下， 修改文件名为 `clash_meta`。
+
+```bash
+tar xvf clash-linux-amd64-v1.tar.gz
+scp ./clash-linux-amd64-v1/clash root@192.168.0.1:/etc/openclash/core/clash_meta
+```
+
+可以 ssh 登录上去 openwrt，执行命令查看版本：
+
+```bash
+$ /etc/openclash/core/clash_meta -v
+Mihomo Meta alpha-gc13549f linux amd64 with go1.24.7 Mon Oct  6 20:13:48 UTC 2025
+Use tags: with_gvisor
+
+$ ls -lh /etc/openclash/core/clash_meta
+-rwxr-xr-x    1 root     root        8.4M Oct  7 04:13 /etc/openclash/core/clash_meta
+```
 
 ## 避免bt流量走代理
 

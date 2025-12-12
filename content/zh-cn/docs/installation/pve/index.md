@@ -43,7 +43,7 @@ description: >
 
 - memory（内存）
 
-  内存给2048 （2g），最新内存给 1024 （1G）。
+  内存给2048 （2g）。
 
 - network（网络）
 
@@ -84,7 +84,7 @@ total 2.9G
 执行下列命令将这个 img 镜像倒入到虚拟机中：
 
 ```bash
-qm importdisk 108 /var/lib/vz/template/iso/openwrt.img local
+qm importdisk 1000 /var/lib/vz/template/iso/openwrt.img local
 ```
 
 > 备注： 
