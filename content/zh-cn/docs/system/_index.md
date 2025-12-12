@@ -1,6 +1,6 @@
 ---
-title: "设置OpenWRT的系统"
-linkTitle: "系统设置"
+title: "系统设置"
+linkTitle: "系统"
 weight: 600
 date: 2021-08-26
 description: >

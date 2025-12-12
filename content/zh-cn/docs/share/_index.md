@@ -1,5 +1,5 @@
 ---
-title: "设置OpenWRT的网络共享"
+title: "网络共享"
 linkTitle: "共享"
 weight: 1000
 date: 2021-08-26

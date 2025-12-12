@@ -1,5 +1,5 @@
 ---
-title: "OpenWRT的驱动设置"
+title: "驱动"
 linkTitle: "驱动"
 weight: 500
 date: 2021-08-26

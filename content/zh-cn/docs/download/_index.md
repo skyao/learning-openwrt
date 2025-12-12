@@ -1,5 +1,5 @@
 ---
-title: "设置OpenWRT的网络下载"
+title: "网络下载"
 linkTitle: "下载"
 weight: 3000
 date: 2021-08-26

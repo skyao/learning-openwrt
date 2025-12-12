@@ -1,5 +1,5 @@
 ---
-title: "OpenWRT的安装"
+title: "安装"
 linkTitle: "安装"
 weight: 200
 date: 2021-08-26

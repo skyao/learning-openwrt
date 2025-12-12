@@ -1,5 +1,5 @@
 ---
-title: "设置OpenWRT的DNS解析"
+title: "DNS解析"
 linkTitle: "DNS"
 weight: 4000
 date: 2021-08-26
