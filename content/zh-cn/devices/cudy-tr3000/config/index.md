@@ -284,6 +284,38 @@ scp ./clash root@192.168.5.1:/etc/openclash/core/clash_meta
 
 成功启动后，打开 覆盖设置 -> 设置 SOCKS5/HTTP(S) 认证信息, 取消勾选, 不开启代理的认证。
 
+### fake ip 造成的 ssh 和 ping 失败
+
+如果 openclash 配置了 fake ip，可能会造成 ssh 和 ping 失败。体现为：
+
+```bash
+$ ping skyao.net
+
+PING skyao.net (198.18.0.20) 56(84) bytes of data.
+From pw.lan (192.168.5.1) icmp_seq=1 Destination Port Unreachable
+From pw.lan (192.168.5.1) icmp_seq=2 Destination Port Unreachable
+
+$ nslookup ecs3.skyao.net 
+Server:		8.8.8.8
+Address:	8.8.8.8#53
+
+Name:	ecs3.skyao.net
+Address: 198.18.0.17
+
+$ ssh sky@ecs3.skyao.net
+Connection closed by 198.18.0.13 port 22
+```
+
+简单说，就是 openclash 的 fake ip 机制生效了，dns 解析为 fake ip 如 198.18 号段，但 ping 和 ssh 时，请求没有被 openclash 劫持并反查 fack ip，而是真的去请求 198.18.0.17 这个 ip 地址，当然会失败。
+
+没有找到特别好的解决办法，只能暂时关闭部分域名解析的 fake ip，让这部分域名的 dns 解析使用真实的 ip 地址，而不是 fake ip。暂时规避这个问题。
+
+解决方案：
+
+- 打开 openclash 的配置，“覆写配置” -> "DNS设置"，勾选 "Fake-IP-Filter"，Fake-IP-Filter-Mode 选择 "黑名单模式"，输入要屏蔽的域名，比如 skyao.net，然后保存。
+
+目前这个问题暂时只在 cudy tr3000 上遇到（也许和 qwrt 有关？）。
+
 ## 精简
 
 虽然默认的固件已经很精简了，但有些软件包还是占用了一些空间，可以精简一下。
