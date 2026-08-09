@@ -1,69 +1,17 @@
 ---
-title: "设置CloudDrive2"
-linkTitle: "CloudDrive2"
-weight: 30
+title: "通过nfs进行访问"
+linkTitle: "nfs访问"
+weight: 10
 date: 2021-08-26
 description: >
-  通过 CloudDrive2 挂载 115 网盘
+  通过 nfs 访问 CloudDrive2 挂载的 115 网盘
 ---
 
-## CloudDrive2 设置
+## openwrt 服务器端
 
-### 安装 CloudDrive2
+### nfs export
 
-在 openwrt 上安装 CloudDrive2 插件，并进行配置。
-
-可以通过 istore 进行安装，在 istore 中找到 CloudDrive2 插件，点击安装即可（注意这次安装的 openwrt 的 clouddrive2 插件）。
-
-然后在 openwrt 下找到 CloudDrive2 插件，继续再安装（这次是安装 clouddrive2 的 docker 容器），全部默认，但要勾选上共享 `/mnt` 目录。
-
-安装完成后，状态显示： clouddrive2 运行中。点击 "打开clouddrive2" 按钮，进入 clouddrive2 的 web 界面。
-
-### 注册和登录
-
-可以先注册一个 clouddrive2 的账号，然后登录。
-
-### CloudDrive2 系统设置
-
-右上角点用户图表，菜单中选择 "设置"，进入 CloudDrive2 系统设置页面。
-
-- 目录缓存时间（秒）： 修改为0,表示永不过期
-
-- 启用缓存持久化
-
-### 添加 115 为云存储
-
-通常 clouddrive2 的 web 界面地址为，其中端口默认是 19798：
-
-http://192.168.3.1:19798/
-
-右上角选择语言为中文。
-
-云存储中，点击"添加"，然后选择 "115open"，认证方式选择 "OAuth认证"。在点击 "使用以下方式授权 115open" 按钮，在弹出的页面中登录115并完成授权。
-
-115open 中，点击管理：
-
-- 最大下载线程数: 默认2,修改为10（备注：发现改不了，只能用默认值2，估计是需要用付费版本）
-
-- 勾选 使用 HTTP 下载
-
-- 最小读取长度 (KB):： 2048 KB
-
-- 最大缓冲池大小 (MB): 256MB
-
-### 挂载115网盘
-
-进入 挂载 页面，点击 "添加挂载点"，选择：
-
-- 源目录：`/115open`
-
-- 挂载点： `/mnt/CloudNAS/115open`
-
-此时，可以 ssh 登录 openwrt，或者在 openwrt 的页面上浏览目录 `/mnt/CloudNAS/115open`，就可以看到挂载的 115 网盘的文件。
-
-## openwrt 设置
-
-修改 nfs export 设置：
+在 openwrt 的服务器端修改 nfs export 设置：
 
 ```bash
 vi /etc/exports
@@ -72,7 +20,7 @@ vi /etc/exports
 内容设置为：
 
 ```bash
-/mnt/CloudNAS/115open 192.168.0.0/16(rw,async,no_root_squash,insecure,no_subtree_check,fsid=101)
+/mnt/CloudNAS/115open/CloudDrive 192.168.0.0/16(ro,async,insecure,all_squash,anonuid=0,anongid=0,no_subtree_check,fsid=101)
 ```
 
 重启 nfs server：
@@ -82,19 +30,18 @@ exportfs -arv
 /etc/init.d/nfsd restart
 ```
 
-正常此时 openwrt 上已经 mount 成功115网盘，可以看到网盘文件如：
+正常此时 openwrt 上已经通过 nfs 将成功115网盘所在的 /mnt/CloudNAS/115open/CloudDrive 目录 export 出来。
+
+备注：这里发生过错误，exportfs 时报错：
 
 ```bash
-ls -l /mnt/CloudNAS/115open
-drwxr-xr-x    1 root     root             0 Nov 11 19:26 backup
-drwxr-xr-x    1 root     root             0 Nov 14 04:37 data
-drwxr-xr-x    1 root     root             0 Oct 21 23:29 game
-drwxr-xr-x    1 root     root             0 Oct 21 23:45 movie
-drwxr-xr-x    1 root     root             0 Nov 10 01:42 musiz
-drwxr-xr-x    1 root     root             0 Oct 30 22:15 temp
-drwxr-xr-x    1 root     root             0 Oct 21 23:29 tv
-......
+exporting 192.168.0.0/16:/mnt/CloudNAS/115open
+exportfs: /mnt/CloudNAS/115open does not support NFS export
 ```
+
+主要需要将路径设置为 `/mnt/CloudNAS/115open/CloudDrive/`，而不是 `/mnt/CloudNAS/115open`！
+
+另外，nfs export 为 ro 只读即可，rw 虽然可以设置，但是写入文件报错。写网盘还是用 sbm 共享合适。
 
 ## nfs client 设置
 
@@ -112,7 +59,7 @@ sudo apt install nfs-client
 $ showmount -e 192.168.3.1
 
 Export list for 192.168.3.1:
-/mnt/CloudNAS/115open 192.168.0.0/16
+/mnt/CloudNAS/115open/CloudDrive 192.168.0.0/16
 ```
 
 尝试 mount 到本地：
@@ -121,7 +68,7 @@ Export list for 192.168.3.1:
 mkdir -p ~/temp/115
 cd ~/temp/
 
-sudo mount -v -t nfs -o vers=3,nolock,proto=tcp 192.168.3.1:/mnt/CloudNAS/115open ./115
+sudo mount -v -t nfs -o vers=3,nolock,proto=tcp 192.168.3.1:/mnt/CloudNAS/115open/CloudDrive ./115
 ```
 
 mount 成功之后，可以查看 mount 后的 115 网盘的文件：
@@ -129,6 +76,48 @@ mount 成功之后，可以查看 mount 后的 115 网盘的文件：
 ```bash
 $ ls ./115
 backup  data  game  movie  musiz  temp  tv
+```
+
+方便起见，将 mount 信息固化到 fstab，但是不自动装载：
+
+```bash
+mkdir -p ~/mounts
+sudo vi /etc/fstab
+```
+
+在文件末尾追加内容，注意一定要加上 noauto 表示开机不自动挂载：
+
+```bash
+# skyroute3 115 网盘挂载
+192.168.3.1:/mnt/CloudNAS/115open/CloudDrive /home/sky/mounts/skyrouter3-115-nfs nfs vers=3,nolock,proto=tcp,user,noauto,ro 0 0
+```
+
+重载入：
+
+```bash
+sudo systemctl daemon-reload
+```
+
+在 zsh 中增加两个快捷命令：
+
+```bash
+vi ~/.zshrc
+```
+
+增加内容:
+
+```bash
+# 115 netdisk mount and umount
+alias skyrouter3-115-nfs-mount='mkdir -p $HOME/mounts/skyrouter3-115-nfs && mount $HOME/mounts/skyrouter3-115-nfs'
+alias skyrouter3-115-nfs-umount='umount -l $HOME/mounts/skyrouter3-115-nfs'
+```
+
+skyrouter3-115-nfs-mount / skyrouter3-115-nfs-umount 两个命令直接用，测试如下：
+
+```bash
+source ~/.zshrc   
+skyrouter3-115-nfs-mount 
+skyrouter3-115-nfs-umount  
 ```
 
 #### 播放蓝光圆盘
@@ -188,7 +177,7 @@ C:\Users\sky>mount
 ```bash
 $ showmount -e 192.168.3.1
 导出列表在 192.168.3.1:
-/mnt/CloudNAS/115open              192.168.0.0/16
+/mnt/CloudNAS/115open/CloudDrive              192.168.0.0/16
 ```
 
 在 cmd 中执行（不需要用管理员身份打开 cmd）：

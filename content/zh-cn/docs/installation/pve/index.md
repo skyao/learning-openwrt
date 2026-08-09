@@ -9,11 +9,15 @@ description: >
 
 ## 安装
 
-参考： https://post.smzdm.com/p/a7nqp3r9/ 
-
 ### 准备镜像
 
-下载下来的 img 格式的镜像文件在 PVE 下可以直接使用，比 esxi 下方便。
+解压缩下载的 img.gz 文件，比如：
+
+```bash
+gunzip bleachwrt-mod-20260808-x86-64-generic-squashfs-combined-efi.img.gz
+```
+
+得到的 img 格式的镜像文件在 PVE 下可以直接使用，比 esxi 下方便。
 
 ### 新建虚拟机
 
@@ -21,17 +25,17 @@ description: >
 
 - 常规（general）
 
-  取名 openwrt，高级选项中勾选 "开机自启动"
+  取名 bleachwrt-mod，高级选项中先不勾选 "开机自启动"，等安装调试完成之后再勾选。
 
 - OS（操作系统）
 
   客户机操作系统选 linux，客户机操作系统版本选 `6.x - 2.6 Kernel`。
 
-  光驱选择不使用任何介质。
+  光驱选择不使用任何介质/Do not use any media。
 
 - system（系统）
 
-  scci控制器选择 "virtIO SCSI", 机型选择 q35，勾选 Qemu 代理。Bios 选择默认的 SeaBIOS。
+  scci控制器使用默认的 "VirtIO SCSI single", 机型选择 q35，勾选 Qemu Agent代理。Bios 选择默认的 SeaBIOS。
 
 - disk（磁盘）
 
@@ -39,11 +43,11 @@ description: >
 
 - cpu
 
-  考虑可能有科学上网的消耗，cpu给足一点，插槽1,核心8,类型选 host。
+  考虑可能有科学上网的消耗，cpu给足一点，插槽1, 核心2或者4, 类型选 host。
 
 - memory（内存）
 
-  内存给2048 （2g）。
+  内存给 2048 （2g）。
 
 - network（网络）
 
@@ -74,44 +78,43 @@ ls -lh
 
 ```bash
 ls -lh
-total 2.9G
--rw-r--r-- 1 root root 1.1G Jul 18 01:23 openwrt.img
--rw-r--r-- 1 root root 1.9G Jul 18 08:31 ubuntu-22.04.2-live-server-amd64.iso
+total 1.1G
+-rw-r--r-- 1 root root 1.1G Aug  8 16:26 bleachwrt-mod-20260808-x86-64-generic-squashfs-combined-efi.img
 ```
-
-这里为了方便起见，将原来下载的 img 文件的名字改短了。
 
 执行下列命令将这个 img 镜像倒入到虚拟机中：
 
 ```bash
-qm importdisk 1000 /var/lib/vz/template/iso/openwrt.img local
+qm importdisk 1101 /var/lib/vz/template/iso/bleachwrt-mod-20260808-x86-64-generic-squashfs-combined-efi.img local
 ```
+
+qm importdisk 998001 /var/lib/vz/template/iso/bleachwrt-mod-20260808-x86-64-generic-squashfs-combined-efi.img local
 
 > 备注： 
 >
-> 1. 108 为虚拟机的 ID, 替换为实际 ID
+> 1. 1101 为虚拟机的 ID, 替换为实际 ID
 > 2. local 是存储的名字，我将默认创建的 local-lvm 删除了，空间合并到 local。
 
 输出为：
 
 ```bash
-importing disk '/var/lib/vz/template/iso/openwrt.img' to VM 108 ...
-Formatting '/var/lib/vz/images/108/vm-108-disk-0.raw', fmt=raw size=1090813440 preallocation=off
-transferred 0.0 B of 1.0 GiB (0.00%)
-transferred 12.0 MiB of 1.0 GiB (1.15%)
-transferred 24.0 MiB of 1.0 GiB (2.31%)
+importing disk '/var/lib/vz/template/iso/bleachwrt-mod-20260808-x86-64-generic-squashfs-combined-efi.img' to VM 1101 ...
+Formatting '/var/lib/vz/images/1101/vm-1101-disk-1.raw', fmt=raw size=1141145088 preallocation=off
+transferred 0.0 B of 1.1 GiB (0.00%)
+transferred 12.0 MiB of 1.1 GiB (1.10%)
+transferred 24.1 MiB of 1.1 GiB (2.21%)
 ......
-transferred 1.0 GiB of 1.0 GiB (99.20%)
-transferred 1.0 GiB of 1.0 GiB (100.00%)
-transferred 1.0 GiB of 1.0 GiB (100.00%)
-Successfully imported disk as 'unused0:local:108/vm-108-disk-0.raw'
+transferred 1.1 GiB of 1.1 GiB (99.24%)
+transferred 1.1 GiB of 1.1 GiB (100.00%)
+transferred 1.1 GiB of 1.1 GiB (100.00%)
+unused0: successfully imported disk 'local:1101/vm-1101-disk-1.raw'
 ```
 
 之后就可以在 openwrt 的虚拟机中看到这个未使用的磁盘。
 
 ![unused-disk](images/unused-disk.png)
 
-编辑这个磁盘，不用改动，点添加即可。然后用菜单中的 resize 功能调整磁盘的大小，修改为 8 G。
+双击这个磁盘，不用改动，点添加即可。然后用菜单中的 resize 功能调整磁盘的大小，修改为 32 G。
 
 备注：这个 resize 操作还必须进行，如果直接启动，会报错如下：
 

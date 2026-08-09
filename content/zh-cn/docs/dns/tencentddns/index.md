@@ -59,7 +59,7 @@ https://openapp.qq.com/docs/OpenWRT/ddns.html
 
 这个插件很久没有更新了，不过目前还可以用。
 
-安装方式参考上面文档的说明，在 openwrt 的 系统 -》软件包 页面进行网络安装：
+安装方式参考上面文档的说明，在 openwrt 的 系统 -》软件包 页面进行网络安装（安装前要更新一下软件包，否则会报错找不到依赖包 openssl-util）：
 
 ```bash
 Downloading http://openwrt-tencentddns-1301800460.cos.ap-guangzhou.myqcloud.com/luci-app-tencentddns_0.1.0-1_all.ipk
