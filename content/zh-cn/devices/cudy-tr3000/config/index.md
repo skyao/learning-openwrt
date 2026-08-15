@@ -7,6 +7,8 @@ description: >
   配置 Cudy TR3000 openwrt
 ---
 
+备注：以下配置以 24.xx 版本为例，也就是 kwrt-11.10.2025-mediatek-filogic-cudy_tr3000-mod-squashfs-sysupgrade.bin 这个固件。
+
 ## 连接
 
 插入网线接到cudy tr3000的lan口，设置 dhcp，正常能获取 10.0.0.x 的 ip 地址。
@@ -17,13 +19,13 @@ http://10.0.0.1
 
 用默认的帐号 root/root 登录。
 
-打开 系统 -> 管理权，修改密码。
+打开 系统 -> 管理权，修改密码，并添加 SSH 密钥。
 
 wan 口先接入其他路由器，方便配置时进行各种下载。
 
 打开 网络 -> 接口 , 默认 wan 使用 dhcp 正常已经连接网络了。
 
-删除 wan6, 编辑 lan，将 lan 的 ip 地址修改为 192.168.5.1 。
+删除 wan6, 编辑 lan，将 lan 的 ip 地址修改为 192.168.5.1/24 。
 
 保存后打开 192.168.5.1 重新登录。
 
@@ -31,59 +33,16 @@ wan 口先接入其他路由器，方便配置时进行各种下载。
 
 打开 istore -> 维护， 更新 istore。
 
-
-
 ## usb 网络
+
+可以通过 opkg 命令执行安装：
 
 ```bash
 opkg update
 opkg install kmod-usb-net-rndis usbutils
 ```
 
-安装过程：
-
-```bash
-opkg install kmod-usb-net-rndis usbutils
-Downloading https://dl.openwrt.ai/releases/24.10/targets/mediatek/filogic/6.6.116/Packages.gz
-Updated list of available packages in /var/opkg-lists/kwrt_core
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/base/Packages.gz
-Updated list of available packages in /var/opkg-lists/kwrt_base
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/Packages.gz
-Updated list of available packages in /var/opkg-lists/kwrt_packages
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/luci/Packages.gz
-Updated list of available packages in /var/opkg-lists/kwrt_luci
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/routing/Packages.gz
-Updated list of available packages in /var/opkg-lists/kwrt_routing
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/kiddin9/Packages.gz
-Updated list of available packages in /var/opkg-lists/kwrt_kiddin9
-Installing kmod-usb-net-rndis (6.6.116-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/targets/mediatek/filogic/6.6.116/kmod-usb-net-rndis_6.6.116-r1_aarch64_cortex-a53.ipk
-Installing kmod-mii (6.6.116-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/targets/mediatek/filogic/6.6.116/kmod-mii_6.6.116-r1_aarch64_cortex-a53.ipk
-Installing kmod-usb-net (6.6.116-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/targets/mediatek/filogic/6.6.116/kmod-usb-net_6.6.116-r1_aarch64_cortex-a53.ipk
-Installing kmod-usb-net-cdc-ether (6.6.116-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/targets/mediatek/filogic/6.6.116/kmod-usb-net-cdc-ether_6.6.116-r1_aarch64_cortex-a53.ipk
-Installing usbutils (017-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/usbutils_017-r1_aarch64_cortex-a53.ipk
-Installing libusb-1.0-0 (1.0.27-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/base/libusb-1.0-0_1.0.27-r1_aarch64_cortex-a53.ipk
-Installing libevdev (1.13.1-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/libevdev_1.13.1-r1_aarch64_cortex-a53.ipk
-Installing libudev-zero (1.0.3-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/libudev-zero_1.0.3-r1_aarch64_cortex-a53.ipk
-Installing usbids (0.387-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/usbids_0.387-r1_aarch64_cortex-a53.ipk
-Configuring libevdev.
-Configuring libusb-1.0-0.
-Configuring kmod-mii.
-Configuring libudev-zero.
-Configuring usbids.
-Configuring usbutils.
-Configuring kmod-usb-net.
-Configuring kmod-usb-net-cdc-ether.
-Configuring kmod-usb-net-rndis.
-```
+也可以用软件包页面安装。
 
 拔掉网线，usb连接手机，选择usb网络共享。
 
@@ -99,49 +58,9 @@ eth0 显示“已断开”，这个是网线。
 
 ### 安装 zerotier
 
-在页面登录之后，进入 istore 页面，进入 istore ，选择更新 istore。
+在页面登录之后，进入 系统 -》 软件包。
 
-搜索 zerotier，找到 zerotier 之后点击安装：
-
-```bash
-istore (完成于： 11/22/2025, 4:50:20 PM) > is-opkg install 'app-meta-zerotier'
-
-Try mirror server https://repo.istoreos.com/repo
-Installing app-meta-zerotier (1.3.0-1) to root...
-Downloading https://repo.istoreos.com/repo/all/meta/app-meta-zerotier_1.3.0-1_all.ipk
-Installing libminiupnpc (2.2.8-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/libminiupnpc_2.2.8-r1_aarch64_cortex-a53.ipk
-Installing libnatpmp1 (20230423-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/libnatpmp1_20230423-r1_aarch64_cortex-a53.ipk
-Installing zerotier (1.14.1-r3) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/zerotier_1.14.1-r3_aarch64_cortex-a53.ipk
-Installing luci-app-zerotier (26.218.43438~65032d3) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/kiddin9/luci-app-zerotier_26.218.43438~65032d3_all.ipk
-Installing luci-i18n-zerotier-zh-cn (git-25.156.35898-bfd1fcd) to root...
-Downloading https://repo.istoreos.com/repo/all/nas_luci/luci-i18n-zerotier-zh-cn_git-25.156.35898-bfd1fcd_all.ipk
-Configuring libminiupnpc.
-Configuring libnatpmp1.
-Configuring zerotier.
-disabled in /etc/config/zerotier
-Configuring luci-app-zerotier.
-Configuring luci-i18n-zerotier-zh-cn.
-Configuring app-meta-zerotier.
-Try mirror server https://repo.istoreos.com/repo
-Package zerotier (1.14.1-r3) installed in root is up to date.
-Package luci-app-zerotier (26.218.43438~65032d3) installed in root is up to date.
-Package luci-i18n-zerotier-zh-cn (git-25.156.35898-bfd1fcd) installed in root is up to date.
-```
-
-注意不要直接安装 zerotier 或者 luci-app-zerotier
-
-```bash
-# 这个会安装 zerotier，但是没有界面
-opkg install  zerotier
-# 这个会安装 luci 界面，但有些 openwrt 比如我的 cudy tr3000 用的 kwrt 也会没有页面现实。
-opkg install luci-app-zerotier
-```
-
-也不要在 系统 -》软件包内安装 openwrt 或者 luci-app-zerotier，问题都一样，没有页面。
+搜索 zerotier，找到 luci-app-zerotier 之后点击安装，会自动安装 luci-app-zerotier 和 zerotier。zerotier 的版本为 1.16.0-r1。
 
 ### 设置 zerotier 插件
 
@@ -151,16 +70,19 @@ Global configuration：
 
 - 启用: 勾选
 - Allow input traffic: 勾选
+- 本地配置路径：不要指定
+- 配置路径：不要指定
 
 Network configuration, 配一行就可以了：
 
-- NetworkId
-- Allow managed IP/route: 勾选
-- Allow global IP/route: 勾选
-- Allow default route: 勾选
-- Allow input: 勾选
-- Allow forward: 勾选
-- Forward interfaces： 不选，默认就是all （Leave empty for all.）
+- NetworkId: 填写自己的
+- 允许管理IP/路由: 勾选
+- 允许全局IP/路由
+- 许默认路由
+- 允许 DNS
+- 允许入站: 勾选
+- 允许转发: 勾选
+- IP 动态伪装: 勾选
 
 ### 配置 zerotier 服务
 
@@ -208,52 +130,43 @@ ping 192.168.5.1
 
 正常此时应该可以 ping 通的.
 
+### 故障排除：路由无法转发
+
+有时会遇到这个故障，体现为：
+
+1. openwrt 路由器可以正常上网，正常连接 zerotier 网络，也能 ping zerotier 网络中的其他主机
+2. 连接到 openwrt 路由器的机器，可以上网，但是无法使用 zerotier 网络，ping zerotier 网络中的其他主机报错：
+   
+   ```bash
+   ping 192.168.192.100
+   PING 192.168.192.100 (192.168.192.100) 56(84) bytes of data.
+   From 192.168.5.1 icmp_seq=1 Destination Port Unreachable
+   From 192.168.5.1 icmp_seq=2 Destination Port Unreachable
+   From 192.168.5.1 icmp_seq=3 Destination Port Unreachable
+   ```
+参考豆包： https://www.doubao.com/chat/38437751886886914
+
+解决方案：
+
+```bash
+# 将zt接口放入firewall的lan区域：具体名字通过 ip addr 获取
+# 将设备 ztw4lflcku 加入lan zone的device列表
+uci add_list firewall.@zone[0].device='ztw4lflcku'
+uci commit firewall
+/etc/init.d/firewall restart
+```
+
 ## openclash
 
 ### 安装
 
-进入 系统 -> 软件包，先更新列表，再在过滤器中输入 openclash，显示 luci-app-openclash，点击安装。
+由于安装的是最新的 25.x 版本的 kwrt，内核 6.12,所以 istore 中没有合适的 openclash 版本可以直接安装。
 
-```bash
-opkg --force-overwrite install luci-app-openclash
+从这里下载类似 luci-app-openclash_0.47.133_all.ipk 的文件：
 
-Installing luci-app-openclash (0.47.028-r30) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/kiddin9/luci-app-openclash_0.47.028-r30_all.ipk
-Installing libruby3.3 (3.3.9-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/libruby3.3_3.3.9-r1_aarch64_cortex-a53.ipk
-Installing ruby (3.3.9-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/ruby_3.3.9-r1_aarch64_cortex-a53.ipk
-Installing ruby-digest (3.3.9-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/ruby-digest_3.3.9-r1_aarch64_cortex-a53.ipk
-Installing ruby-enc (3.3.9-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/ruby-enc_3.3.9-r1_aarch64_cortex-a53.ipk
-Installing ruby-pstore (3.3.9-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/ruby-pstore_3.3.9-r1_aarch64_cortex-a53.ipk
-Installing ruby-bigdecimal (3.3.9-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/ruby-bigdecimal_3.3.9-r1_aarch64_cortex-a53.ipk
-Installing ruby-date (3.3.9-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/ruby-date_3.3.9-r1_aarch64_cortex-a53.ipk
-Installing ruby-stringio (3.3.9-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/ruby-stringio_3.3.9-r1_aarch64_cortex-a53.ipk
-Installing libyaml (0.2.5-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/libyaml_0.2.5-r1_aarch64_cortex-a53.ipk
-Installing ruby-psych (3.3.9-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/ruby-psych_3.3.9-r1_aarch64_cortex-a53.ipk
-Installing ruby-yaml (3.3.9-r1) to root...
-Downloading https://dl.openwrt.ai/releases/24.10/packages/aarch64_cortex-a53/packages/ruby-yaml_3.3.9-r1_aarch64_cortex-a53.ipk
-Configuring libruby3.3.
-Configuring ruby.
-Configuring ruby-digest.
-Configuring ruby-enc.
-Configuring ruby-pstore.
-Configuring ruby-stringio.
-Configuring ruby-bigdecimal.
-Configuring ruby-date.
-Configuring libyaml.
-Configuring ruby-psych.
-Configuring ruby-yaml.
-Configuring luci-app-openclash.
-```
+https://github.com/vernesong/OpenClash/releases
+
+最简单的安装方式是通过 istore 的手动安装功能，通过页面上传并安装。
 
 ### 配置
 
@@ -272,10 +185,16 @@ Configuring luci-app-openclash.
 
 打开 openclash 的 插件设置 -> 版本更新，找到 meta 内核的"下载最新版本内核", 点下载。
 
+备注：最近这个路径报错 not found。需要到 https://github.com/vernesong/mihomo-oix/releases/ 这里，找到类似 mihomo-linux-arm64-alpha-oix-4d6fda7.gz 的下载下来。
+
+
 找到下载下来的 clash-linux-arm64.tar.gz，解压得到 clash 文件，然后上传到 clash 目录下
 
 ```bash
 scp ./clash root@192.168.5.1:/etc/openclash/core/clash_meta
+
+# 登录上去 openwrt，增加执行权限
+chmod +x /etc/openclash/core/clash_meta
 ```
 
 刷新 openclash 页面，可以看到内核已经更新成功。
@@ -331,21 +250,6 @@ Removing package luci-app-passwall from root...
 Not deleting modified conffile /usr/share/passwall/rules/proxy_host.
 
 $ rm /usr/share/passwall/rules/proxy_host
-```
-
-
-卸载 WireGuard：
-
-```bash
-$ opkg list-installed | grep wireguard
-kmod-wireguard - 6.6.116-r1
-luci-proto-wireguard - 26.313.53093~ae2aec8
-wireguard-tools - 1.0.20210914-r4
-
-$ opkg remove kmod-wireguard luci-proto-wireguard wireguard-tools
-Removing package kmod-wireguard from root...
-Removing package luci-proto-wireguard from root...
-Removing package wireguard-tools from root...
 ```
 
 ### 刷新页面
